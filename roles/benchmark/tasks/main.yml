@@ -1,0 +1,18 @@
+---
+- name: copy curl template
+  copy:
+    src: curl_template
+    dest: /tmp/curl_template
+    owner: root
+    group: root
+    mode: 0644
+
+- name: execute curl
+  shell: curl -w "@/tmp/curl-format" -o /dev/null -s {{ URL }}
+  register: curl
+- debug: msg="{{ curl.stdout }}"
+
+- name: ping 
+  shell: sudo ping -n -c 10 {{ ip }}|grep rtt
+  register: ping
+- debug: msg="{{ ping.stdout }}"
